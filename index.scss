@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  background: black;
+  display: flex;
+}
+
+.glitch {
+  margin: auto;
+  font: bold 10vmax / 1 Helvetica, sans-serif;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+  }
+
+  &::before {
+    left: 0.24vmax;
+    text-shadow: -0.12vmax 0 red;
+    animation: glitch-animation-1 2s infinite linear alternate-reverse;
+  }
+  &::after {
+    left: -0.24vmax;
+    text-shadow: -0.12vmax 0 blue;
+    animation: glitch-animation-2 3s infinite linear alternate-reverse;
+  }
+}
+
+@at-root {
+  $step-number: 20;
+
+  @for $i from 1 through 2 {
+    @keyframes glitch-animation-#{$i} {
+      @for $i from 0 through $step-number {
+        $frame: percentage($i / $step-number);
+        $t: random(100); // top
+        $b: random(101 - $t); // bottom
+
+        #{$frame} {
+          clip-path: inset(#{$t * 1%} 0 #{$b * 1%} 0);
+        }
+      }
+    }
+  }
+}
